@@ -1,0 +1,57 @@
+#include <string.h>
+
+#include "scribe_c.h"
+
+#include <thrift/protocol/TBinaryProtocol.h>
+#include <thrift/protocol/TProtocol.h>
+#include <thrift/transport/TSocket.h>
+#include <thrift/transport/TTransport.h>
+#include <thrift/transport/TTransportUtils.h>
+
+#include "gen-cpp/scribe.h"
+
+using namespace std;
+using namespace apache::thrift;
+using namespace apache::thrift::protocol;
+using namespace apache::thrift::transport;
+
+using namespace scribe::thrift;
+using namespace scribe;
+
+int thrift_open(thrift_c_t *p, const char *host, const int port) {
+  p->host = strdup(host);
+  p->port = port;
+
+  boost::shared_ptr<TSocket> socket(new TSocket(p->host, p->port));
+  socket->setLinger(true,1);
+  boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
+  boost::shared_ptr<TProtocol>  protocol(new TBinaryProtocol(transport));
+
+  scribeClient *client = new scribeClient(protocol);
+
+  transport->open();
+  p->scribeClient = client;
+  p->transport    = static_cast<void*>(transport.get());
+
+  return 0;
+}
+
+int thrift_write(thrift_c_t *p, const char *category, const char *buf) {
+  LogEntry entry;
+  entry.category = category;
+  entry.message = buf;
+
+  std::vector<LogEntry> msgs;
+  msgs.push_back(entry);
+
+  int result = ((scribeClient*)p->scribeClient)->Log(msgs);
+  return result;
+}
+
+int thrift_close(thrift_c_t *p) {
+  ((TTransport*)p->transport)->close();
+  delete (scribeClient*)p->scribeClient;
+  memset(p, 0, sizeof(thrift_c_t));
+  return 0;
+}
+

@@ -15,3 +15,6 @@
 *.exe
 *.out
 *.app
+.deps
+src/gen-cpp
+*.cache

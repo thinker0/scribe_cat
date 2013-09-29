@@ -24,6 +24,11 @@ int thrift_open(thrift_c_t *p, const char *host, const int port) {
 
   boost::shared_ptr<TSocket> socket(new TSocket(p->host, p->port));
   socket->setLinger(true,1);
+  socket->setNoDelay(true);
+  socket->setConnTimeout(100);
+  socket->setSendTimeout(100);
+  socket->setRecvTimeout(100);
+  socket->setMaxRecvRetries(3);
   boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
   boost::shared_ptr<TProtocol>  protocol(new TBinaryProtocol(transport));
 

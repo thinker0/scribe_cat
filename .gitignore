@@ -18,3 +18,4 @@
 .deps
 src/gen-cpp
 *.cache
+src/gen-c_glib

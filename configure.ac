@@ -18,7 +18,10 @@ AC_PROG_RANLIB
 # Checks for libraries.
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdlib.h string.h])
+AC_CHECK_HEADERS([stdio.h stdlib.h string.h stdint.h inttypes.h])
+
+AC_CHECK_LIB([thrift], [main])
+AC_CHECK_LIB([thriftnb], [main])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
@@ -26,11 +29,16 @@ AC_TYPE_INT16_T
 AC_TYPE_INT32_T
 AC_TYPE_INT64_T
 AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
 AC_TYPE_UINT32_T
 AC_TYPE_UINT8_T
 
 # Checks for library functions.
-AC_CHECK_FUNCS([memset socket strdup])
+AC_CHECK_FUNCS([memset socket strdup getline])
+
+PKG_CHECK_MODULES([THRIFT], [thrift])
+PKG_CHECK_MODULES([THRIFT_NG], [thrift-nb])
+PKG_CHECK_MODULES([THRIFT_Z], [thrift-z])
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile])

@@ -33,3 +33,6 @@ automake -ac --include-deps --add-missing --foreign || exit 1
 
 # To be safe include -I flag
 ./configure --config-cache $*
+
+thrift -o src/ -I ./if --gen cpp:pure_enums --gen c_glib ./if/fb303.thrift
+thrift -o src/ -I ./if --gen cpp:pure_enums --gen c_glib ./if/scribe.thrift

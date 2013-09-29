@@ -15,7 +15,8 @@
 *.exe
 *.out
 *.app
+*.cache
 .deps
 src/gen-cpp
-*.cache
 src/gen-c_glib
+src/scribe_cat

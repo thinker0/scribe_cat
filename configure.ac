@@ -19,6 +19,7 @@ AC_PROG_RANLIB
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdio.h stdlib.h string.h stdint.h inttypes.h])
+AC_CHECK_HEADERS([sys/time.h])
 
 AC_CHECK_LIB([thrift], [main])
 AC_CHECK_LIB([thriftnb], [main])
@@ -34,7 +35,9 @@ AC_TYPE_UINT32_T
 AC_TYPE_UINT8_T
 
 # Checks for library functions.
-AC_CHECK_FUNCS([memset socket strdup getline])
+AC_CHECK_FUNCS([memset socket strdup])
+AC_CHECK_FUNCS([getline])
+AC_CHECK_FUNCS([gettimeofday])
 
 PKG_CHECK_MODULES([THRIFT], [thrift])
 PKG_CHECK_MODULES([THRIFT_NG], [thrift-nb])

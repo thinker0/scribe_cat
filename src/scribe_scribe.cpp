@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "scribe_c.h"
+#include "scribe_scribe.h"
 
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/protocol/TProtocol.h>
@@ -18,7 +18,7 @@ using namespace apache::thrift::transport;
 using namespace scribe::thrift;
 using namespace scribe;
 
-int thrift_open(thrift_c_t *p, const char *host, const int port) {
+int thrift_scribe_open(thrift_scribe_t *p, const char *host, const int port) {
   p->host = strdup(host);
   p->port = port;
 
@@ -41,7 +41,7 @@ int thrift_open(thrift_c_t *p, const char *host, const int port) {
   return 0;
 }
 
-int thrift_write(thrift_c_t *p, const char *category, const char *buf) {
+int thrift_scribe_write(thrift_scribe_t *p, const char *category, const char *buf) {
   LogEntry entry;
   entry.category = category;
   entry.message = buf;
@@ -53,10 +53,10 @@ int thrift_write(thrift_c_t *p, const char *category, const char *buf) {
   return result;
 }
 
-int thrift_close(thrift_c_t *p) {
+int thrift_scribe_close(thrift_scribe_t *p) {
   ((TTransport*)p->transport)->close();
   delete (scribeClient*)p->scribeClient;
-  memset(p, 0, sizeof(thrift_c_t));
+  memset(p, 0, sizeof(thrift_scribe_t));
   return 0;
 }
 

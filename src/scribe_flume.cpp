@@ -18,7 +18,7 @@ using namespace apache::thrift::transport;
 using namespace flume::thrift;
 using namespace flume;
 
-int thrift_flume_open(thrift_flume_t *p, const char *host, const int port) {
+int thrift_flume_open(thrift_t *p, const char *host, const int port) {
   p->host = strdup(host);
   p->port = port;
 
@@ -35,23 +35,23 @@ int thrift_flume_open(thrift_flume_t *p, const char *host, const int port) {
   void *client = new ThriftSourceProtocolClient(protocol);
 
   transport->open();
-  p->flumeClient = client;
+  p->client = client;
   p->transport    = static_cast<void*>(transport.get());
 
   return 0;
 }
 
-int thrift_flume_write(thrift_flume_t *p, const char *category, const char *buf) {
+int thrift_flume_write(thrift_t *p, const char *category, const char *buf) {
   ThriftFlumeEvent entry;
   entry.__set_body(buf);
-  int result = ((ThriftSourceProtocolClient*)p->flumeClient)->append(entry);
+  int result = ((ThriftSourceProtocolClient*)p->client)->append(entry);
   return result;
 }
 
-int thrift_flume_close(thrift_flume_t *p) {
+int thrift_flume_close(thrift_t *p) {
   ((TTransport*)p->transport)->close();
-  delete (ThriftSourceProtocolClient*)p->flumeClient;
-  memset(p, 0, sizeof(thrift_flume_t));
+  delete (ThriftSourceProtocolClient*)p->client;
+  memset(p, 0, sizeof(thrift_t));
   return 0;
 }
 

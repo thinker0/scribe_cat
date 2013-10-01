@@ -23,13 +23,11 @@ int main(int argc, char **argv) {
   gettimeofday(&tv, NULL);
   prev_micros = micros = tv.tv_sec;
 
-  void *protocol_type;
+  thrift_t *protocol_type = calloc(1, sizeof(thrift_t));
 
   if (strstr(protocol, "scribe") == protocol) {
-    protocol_type = calloc(1, sizeof(thrift_scribe_t));
     thrift_scribe_open(protocol_type, argv[1], atoi(argv[2]));
   } else if (strstr(protocol, "flume") == protocol) {
-    protocol_type = calloc(1, sizeof(thrift_flume_t));
     thrift_scribe_open(protocol_type, argv[1], atoi(argv[2]));
   }
 

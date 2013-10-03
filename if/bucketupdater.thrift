@@ -1,6 +1,6 @@
 #!/usr/local/bin/thrift --gen cpp:pure_enums --gen php
 
-##  Copyright (c) 2007-2008 Facebook
+##  Copyright (c) 2009- Facebook
 ##
 ##  Licensed under the Apache License, Version 2.0 (the "License");
 ##  you may not use this file except in compliance with the License.
@@ -17,24 +17,21 @@
 ## See accompanying file LICENSE or visit the Scribe site at:
 ## http://developers.facebook.com/scribe/
 
-include "fb303.thrift"
-
 namespace cpp scribe.thrift
-namespace java com.facebook.scribe
+namespace java com.facebook.infrastructure.service
 
-enum ResultCode
-{
-  OK,
-  TRY_LATER
+// BucketStoreMapping service exception
+exception BucketStoreMappingException {
+  1: string message;
+  2: i32 code;
 }
 
-struct LogEntry
-{
-  1:  string category,
-  2:  string message
+struct HostPort {
+  2: string host,
+  3: i32 port
 }
-
-service scribe extends fb303.FacebookService
-{
-  ResultCode Log(1: list<LogEntry> messages);
+ 
+service BucketStoreMapping {
+  // given a category, return a list of HashCodeToNetworkStore mappings
+  map<i32, HostPort> getMapping(1: string category) throws (1: BucketStoreMappingException e);
 }

@@ -29,3 +29,4 @@ src/scribe_cat
 *.patch
 target
 *.diff
+/bin

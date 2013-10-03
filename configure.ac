@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
-AC_CONFIG_SRCDIR([src/scribe_c.cpp])
+AC_CONFIG_SRCDIR([src/scribe_cat.cpp])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([subdir-objects -Wall -Werror foreign])
@@ -20,6 +20,7 @@ AC_PROG_RANLIB
 # Checks for header files.
 AC_CHECK_HEADERS([stdio.h stdlib.h string.h stdint.h inttypes.h])
 AC_CHECK_HEADERS([sys/time.h])
+AC_CHECK_HEADERS([glog/logging.h])
 
 AC_CHECK_LIB([thrift], [main])
 AC_CHECK_LIB([thriftnb], [main])
@@ -42,6 +43,7 @@ AC_CHECK_FUNCS([gettimeofday])
 PKG_CHECK_MODULES([THRIFT], [thrift])
 PKG_CHECK_MODULES([THRIFT_NG], [thrift-nb])
 PKG_CHECK_MODULES([THRIFT_Z], [thrift-z])
+PKG_CHECK_MODULES([GLOG], [libglog])
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile])

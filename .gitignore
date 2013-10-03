@@ -20,3 +20,10 @@
 src/gen-cpp
 src/gen-c_glib
 src/scribe_cat
+*.xcodeproj
+*.xcworkspace
+.settings
+.project
+.cproject
+/Build (GNU)
+*.patch

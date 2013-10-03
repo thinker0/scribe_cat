@@ -2,7 +2,7 @@
 all:
 
 bin_PROGRAMS = scribe_cat
-scribe_cat_SOURCES = scribe_c.cpp scribe_cat.c
+scribe_cat_SOURCES = scribe_c.cpp scribe_cat.cpp
 scribe_cat_SOURCES += gen-cpp/FacebookService.cpp gen-cpp/fb303_constants.cpp gen-cpp/fb303_types.cpp 
 scribe_cat_SOURCES += gen-cpp/scribe.cpp gen-cpp/scribe_constants.cpp gen-cpp/scribe_types.cpp
 scribe_cat_SOURCES += gen-cpp/flume_constants.cpp gen-cpp/flume_types.cpp gen-cpp/ThriftSourceProtocol.cpp

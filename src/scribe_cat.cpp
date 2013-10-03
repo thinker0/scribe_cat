@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <glog/logging.h>
 #include "scribe_c.h"
 
 int main(int argc, char **argv) {
@@ -12,7 +13,8 @@ int main(int argc, char **argv) {
     fprintf(stderr, "scribe_cat hostname port category\n");
     exit(1);
   }
-
+  google::InitGoogleLogging(argv[0]);
+  google::InstallFailureSignalHandler();
   size_t linecap = 0;
   ssize_t linelen = 0;
   long micros = 0, prev_micros = 0;
@@ -21,11 +23,11 @@ int main(int argc, char **argv) {
   gettimeofday(&tv, NULL);
   prev_micros = micros = tv.tv_sec;
 
-  thrift_c_t *scribe = calloc(1, sizeof(thrift_c_t));
+  thrift_c_t *scribe = (thrift_c_t *) calloc(1, sizeof(thrift_c_t));
   thrift_open(scribe, argv[1], atoi(argv[2]));
 
   while ( (linelen = getline(&line, &linecap, stdin)) > 0) {
-    line[linelen-1] = 0;
+    line[linelen-1] = 0; // remove LF
     thrift_write(scribe, argv[3], line);
     line_tps++;
     gettimeofday(&tv, NULL);
@@ -37,5 +39,6 @@ int main(int argc, char **argv) {
     }
   }
   thrift_close(scribe);
+  free(scribe);
   return 0;
 }

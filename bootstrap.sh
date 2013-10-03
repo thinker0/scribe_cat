@@ -37,3 +37,4 @@ automake -ac --include-deps --add-missing --foreign || exit 1
 thrift -o src/ -I ./if --gen cpp:pure_enums --gen c_glib ./if/fb303.thrift
 thrift -o src/ -I ./if --gen cpp:pure_enums --gen c_glib ./if/scribe.thrift
 thrift -o src/ -I ./if --gen cpp:pure_enums --gen c_glib ./if/flume.thrift
+thrift -o src/ -I ./if --gen cpp:pure_enums --gen c_glib --gen java ./if/bucketupdater.thrift

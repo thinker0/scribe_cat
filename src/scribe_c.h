@@ -5,6 +5,10 @@
 extern "C" {
 #endif
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
 typedef struct thrift_c_t {
   char *host;
   int   port;

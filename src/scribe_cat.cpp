@@ -5,6 +5,8 @@
 #include <glog/logging.h>
 #include "scribe_c.h"
 
+using namespace std;
+
 int main(int argc, char **argv) {
   char *line = NULL;
   struct timeval tv;
@@ -17,24 +19,31 @@ int main(int argc, char **argv) {
   google::InstallFailureSignalHandler();
   size_t linecap = 0;
   ssize_t linelen = 0;
-  long micros = 0, prev_micros = 0;
+  long seconds = 0, prev_seconds = 0;
   long line_tps = 0, prev_line_tps = 0;
 
   gettimeofday(&tv, NULL);
-  prev_micros = micros = tv.tv_sec;
+  prev_seconds = seconds = tv.tv_sec;
 
   thrift_c_t *scribe = (thrift_c_t *) calloc(1, sizeof(thrift_c_t));
   thrift_open(scribe, argv[1], atoi(argv[2]));
 
   while ( (linelen = getline(&line, &linecap, stdin)) > 0) {
     line[linelen-1] = 0; // remove LF
-    thrift_write(scribe, argv[3], line);
+    try {
+      thrift_write(scribe, argv[3], line);
+    } catch (...) {
+      thrift_close(scribe);
+      thrift_open(scribe, argv[1], atoi(argv[2]));
+      LOG(ERROR) << "Exception..." << endl;
+    }
+
     line_tps++;
     gettimeofday(&tv, NULL);
-    micros = tv.tv_sec;
-    if (prev_micros != micros) {
+    seconds = tv.tv_sec;
+    if (prev_seconds != seconds) {
       fprintf(stderr, "ScribeLog scribe://%s:%s/%s %ld tps\n", argv[1], argv[2], argv[3], (line_tps - prev_line_tps));
-      prev_micros = micros;
+      prev_seconds = seconds;
       prev_line_tps = line_tps;
     }
   }

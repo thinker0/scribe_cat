@@ -42,7 +42,6 @@ static int __thrift_write_vactor(thrift_c_t *p, const char *category, const vect
   return result;
 }
 
-
 int main(int argc, char **argv) {
   char *line = NULL;
   struct timeval tv;

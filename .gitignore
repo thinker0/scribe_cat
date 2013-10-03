@@ -25,3 +25,4 @@ src/scribe_cat
 .settings
 .project
 .cproject
+/Build (GNU)

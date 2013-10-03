@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
   ssize_t linelen = 0;
   long seconds = 0, prev_seconds = 0;
   long line_tps = 0, prev_line_tps = 0;
+  vector<string> backoff;
 
   gettimeofday(&tv, NULL);
   prev_seconds = seconds = tv.tv_sec;
@@ -31,23 +32,26 @@ int main(int argc, char **argv) {
   while ( (linelen = getline(&line, &linecap, stdin)) > 0) {
     line[linelen-1] = 0; // remove LF
     try {
-      thrift_write(scribe, argv[3], line);
-    } catch (...) {
+      int re = thrift_write(scribe, argv[3], line);
+      // TODO ResultCode::TRY_LATER == 1
+      line_tps++;
+      gettimeofday(&tv, NULL);
+      seconds = tv.tv_sec;
+      if (prev_seconds != seconds) {
+        fprintf(stderr, "ScribeLog scribe://%s:%s/%s %ld tps\n", argv[1], argv[2], argv[3], (line_tps - prev_line_tps));
+        prev_seconds = seconds;
+        prev_line_tps = line_tps;
+      }
+    } catch (exception &e) {
       thrift_close(scribe);
       thrift_open(scribe, argv[1], atoi(argv[2]));
-      LOG(ERROR) << "Exception..." << endl;
-    }
-
-    line_tps++;
-    gettimeofday(&tv, NULL);
-    seconds = tv.tv_sec;
-    if (prev_seconds != seconds) {
-      fprintf(stderr, "ScribeLog scribe://%s:%s/%s %ld tps\n", argv[1], argv[2], argv[3], (line_tps - prev_line_tps));
-      prev_seconds = seconds;
-      prev_line_tps = line_tps;
-    }
-  }
+      LOG(ERROR) << e.what() << "Exception..." << endl;
+      const string msg = line;
+      backoff.push_back(msg);
+    } // try/catch
+  } // while
   thrift_close(scribe);
   free(scribe);
+  delete backoff;
   return 0;
 }

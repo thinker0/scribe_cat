@@ -27,3 +27,5 @@ src/scribe_cat
 .cproject
 /Build (GNU)
 *.patch
+target
+*.diff

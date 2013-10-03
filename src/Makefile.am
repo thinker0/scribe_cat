@@ -12,7 +12,8 @@ scribe_cat_CFLAGS += $(GLOG_CFLAGS)
 scribe_cat_LDFLAGS = $(THRIFT_LIBS) $(THRIFT_NB_LIBS) $(THRIFT_Z_LIBS) $(AM_LDFLAGS)
 scribe_cat_LDFLAGS += $(GLOG_LIBS)
 
-thrift -o . -I ../if --gen cpp:pure_enums --gen c_glib ../if/fb303.thrift
-thrift -o . -I ../if --gen cpp:pure_enums --gen c_glib ../if/scribe.thrift
+thrift -o . -I ../if --gen cpp:pure_enums --gen c_glib --gen java ../if/fb303.thrift
+thrift -o . -I ../if --gen cpp:pure_enums --gen c_glib --gen java ../if/scribe.thrift
+thrift -o . -I ../if --gen cpp:pure_enums --gen c_glib --gen java ../if/flume.thrift
 thrift -o . -I ../if --gen cpp:pure_enums --gen c_glib --gen java ../if/bucketupdater.thrift
 

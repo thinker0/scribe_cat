@@ -4,7 +4,7 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-package com.facebook.scribe;
+package com.facebook.scribe.thrift;
 
 
 import java.util.Map;

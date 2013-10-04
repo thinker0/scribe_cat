@@ -20,7 +20,7 @@
 include "fb303.thrift"
 
 namespace cpp scribe.thrift
-namespace java com.facebook.scribe
+namespace java com.facebook.scribe.thrift
 
 enum ResultCode
 {
